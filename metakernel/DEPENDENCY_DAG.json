@@ -1,0 +1,323 @@
+{
+  "description": "Dependency DAG among 15 sorry sites + shared infrastructure. Edge A -> B means proving A is required for B. Session 4 integration (v4.1).",
+  "generated": "2026-03-19",
+  "updated": "2026-03-19 (v4.1: 67 -> 15 sorrys, cross-direction analysis, infrastructure nodes added)",
+  "build_verified": "0 errors, 15 sorry-using declarations",
+
+  "sorry_inventory": {
+    "total": 15,
+    "actionable": 10,
+    "permanent": 5,
+    "deep_uu_permanent": 1,
+    "false_permanent": 1,
+    "scope_permanent": 3,
+    "note": "vcdim_finite_imp_compression reclassified from actionable to permanent (Gamma_76)"
+  },
+
+  "shared_infrastructure": {
+    "uniform_measure_pi_bridge": {
+      "name": "uniform_measure_pi_bridge",
+      "description": "Measure.pi of uniformMeasure on Fin m -> T = counting/d^m. Key lemmas: uniformMeasure_singleton, pi_uniformMeasure_singleton, pi_uniformMeasure_finset",
+      "needed_by": ["D1", "D2", "D4"],
+      "estimated_loc": 30,
+      "status": "NOT BUILT — D0-Bridge research completed (9 UKs resolved), proof agent launched but results not in codebase",
+      "research_doc": "MetaKernel/URS/v3/D0_Fin_v2_RESOLVED.md"
+    },
+    "fin_arithmetic_toolkit": {
+      "name": "fin_arithmetic_toolkit",
+      "description": "Fin(k*m) block splitting, function type cardinality. block_extract, majority_vote, block_extract_disjoint (sorry-free), iIndepFun_block_extract (SORRY)",
+      "needed_by": ["D2", "D4"],
+      "estimated_loc": 50,
+      "status": "PARTIALLY BUILT — sorry-free definitions in working copy (uncommitted), iIndepFun_block_extract has sorry",
+      "research_doc": "MetaKernel/URS/v4/D0_IndepFun_RESOLVED.md",
+      "codebase_locations": {
+        "block_extract": "Generalization:2983 (uncommitted, sorry-free)",
+        "majority_vote": "Generalization:2987 (uncommitted, sorry-free)",
+        "block_extract_disjoint": "Generalization:2991 (uncommitted, sorry-free)",
+        "iIndepFun_block_extract": "Generalization:3004 (uncommitted, SORRY)"
+      }
+    },
+    "symmetrization_infrastructure": {
+      "name": "symmetrization_infrastructure",
+      "description": "D^(2m) ghost sample coupling + conditioned restriction counting. Double-sample technique for concentration bounds.",
+      "needed_by": ["D1", "D6"],
+      "estimated_loc": 200,
+      "status": "NOT BUILT — route confirmed by D1v5 and D1v6 agents"
+    }
+  },
+
+  "sorry_nodes": {
+    "union_bound_consistent": {
+      "id": 1,
+      "file": "Generalization:616",
+      "direction": "D1",
+      "difficulty": "hard",
+      "status": "OPEN",
+      "depends_on_infrastructure": ["symmetrization_infrastructure", "uniform_measure_pi_bridge"],
+      "agent_history": ["D1v5 (Phase 1 complete)", "D1v6 (confirmed structural)"],
+      "session4_progress": "None"
+    },
+    "vcdim_finite_imp_uc": {
+      "id": 2,
+      "file": "Generalization:1254",
+      "direction": "D1/D3",
+      "difficulty": "medium",
+      "status": "OPEN",
+      "depends_on_infrastructure": ["symmetrization_infrastructure"],
+      "routes": ["ES+Chebyshev (~100 LOC)", "Full symmetrization (~200 LOC)"],
+      "note": "Not critical path — factorial bypass proves PAC"
+    },
+    "pac_lower_bound_core": {
+      "id": 3,
+      "file": "Generalization:1891",
+      "direction": "D2",
+      "difficulty": "medium",
+      "status": "OPEN",
+      "depends_on_infrastructure": ["uniform_measure_pi_bridge"],
+      "session4_progress": "D0-Bridge research completed"
+    },
+    "vcdim_finite_imp_compression": {
+      "id": 4,
+      "file": "Generalization:2102",
+      "direction": "D5-UU",
+      "difficulty": "deep",
+      "status": "PERMANENT",
+      "reason": "Moran-Yehudayoff 2016 (Gamma_76). Littlestone-Warmuth conjecture OPEN 40yr ($600 bounty). Gamma_82: Chase 2022 claimed/withdrew, Chase et al. COLT 2024 showed exponential barriers.",
+      "do_not_attempt": true
+    },
+    "pac_lower_bound_member": {
+      "id": 5,
+      "file": "Generalization:2421",
+      "direction": "D2",
+      "difficulty": "medium",
+      "status": "OPEN",
+      "depends_on_infrastructure": ["uniform_measure_pi_bridge"],
+      "depends_on_sorry": ["pac_lower_bound_core"]
+    },
+    "vcdim_infinite_not_pac": {
+      "id": 6,
+      "file": "Generalization:2861",
+      "direction": "D2",
+      "difficulty": "medium",
+      "status": "OPEN",
+      "depends_on_infrastructure": ["uniform_measure_pi_bridge", "fin_arithmetic_toolkit"],
+      "factored_substeps": ["Substep A (combinatorial)", "Substep B (measure bridge)"]
+    },
+    "vcdim_bounds_rademacher_quantitative": {
+      "id": 7,
+      "file": "Rademacher:390",
+      "direction": "D6",
+      "difficulty": "hard",
+      "status": "OPEN",
+      "depends_on_infrastructure": [],
+      "method": "Massart finite lemma via tensorized Hoeffding + Sauer-Shelah",
+      "session4_progress": "None"
+    },
+    "rademacher_vanishing_imp_pac": {
+      "id": 8,
+      "file": "Rademacher:455",
+      "direction": "D6",
+      "difficulty": "very_hard",
+      "status": "OPEN",
+      "depends_on_infrastructure": [],
+      "method": "Contrapositive: VCDim=inf -> exists D where Rad doesn't vanish",
+      "circularity": "pointwise-in-D hypothesis creates genuine difficulty",
+      "session4_progress": "None"
+    },
+    "sample_complexity_upper_bound": {
+      "id": 9,
+      "file": "Bridge:621",
+      "direction": "D5",
+      "difficulty": "medium",
+      "status": "OPEN — restructured (arithmetic only remains)",
+      "depends_on_infrastructure": [],
+      "agent_history": ["BridgeAgent-v1 (restructured)", "BridgeAgent-v2 (launched, not completed)"],
+      "session4_progress": "All measure theory scaffolded. Remaining sorry is pure arithmetic: show ceil((8/eps)(d*log(2/eps)+log(2/delta))) suffices.",
+      "gamma_80": "NOT one-line — needs log splitting chain"
+    },
+    "compression_bounds_vcdim": {
+      "id": 10,
+      "file": "Bridge:669",
+      "direction": "D5",
+      "difficulty": "medium",
+      "status": "OPEN — proof strategy identified but NOT closed",
+      "depends_on_infrastructure": [],
+      "session4_progress": "Statement corrected from FALSE 2^k-1 (Gamma_79) to 2^(cs.size)-1. Proof strategy via pigeonhole + exp_beats_poly_at identified (Gamma_81). shatters_mono and exp_beats_poly_at made public. SESSION_END_NOTES erroneously claimed closure.",
+      "note": "Build-verified: sorry remains at Bridge:669"
+    },
+    "boost_two_thirds_to_pac": {
+      "id": 11,
+      "file": "Separation:165",
+      "direction": "D4",
+      "difficulty": "medium",
+      "status": "OPEN — partially written (uncommitted)",
+      "depends_on_infrastructure": ["fin_arithmetic_toolkit"],
+      "agent_history": ["D4v2 (confirmed ~100 LOC)", "D0-Fin-v2 (6 UKs resolved)"],
+      "session4_progress": "Learner construction written. Event containment proved. Probability chain set up. Remaining: Chebyshev composition with block independence via iIndepFun_block_extract.",
+      "side_effect": "Closing this also closes universal_imp_pac (Separation calls boost directly)"
+    },
+    "universal_strictly_stronger_pac": {
+      "id": 12,
+      "file": "Separation:571",
+      "direction": "PERMANENT",
+      "difficulty": "N/A",
+      "status": "PERMANENT — FALSE statement",
+      "reason": "Gamma_68: Bousquet et al. STOC 2021 proved PAC <-> Universal for binary classification",
+      "do_not_attempt": true
+    },
+    "natarajan_not_characterizes_pac": {
+      "id": 13,
+      "file": "Separation:600",
+      "direction": "PERMANENT",
+      "difficulty": "N/A",
+      "status": "PERMANENT — UU (topology)",
+      "reason": "Requires hyperbolic pseudo-manifolds (Januszkiewicz-Swiatkowski 2003). Deep algebraic topology absent from Mathlib.",
+      "do_not_attempt": true
+    },
+    "computational_hardness_pac": {
+      "id": 14,
+      "file": "Extended:57",
+      "direction": "PERMANENT",
+      "difficulty": "N/A",
+      "status": "PERMANENT — UU (crypto)",
+      "reason": "Requires one-way function infrastructure. Outside type system scope.",
+      "do_not_attempt": true
+    },
+    "unlabeled_not_implies_labeled": {
+      "id": 15,
+      "file": "Extended:109",
+      "direction": "PERMANENT",
+      "difficulty": "N/A",
+      "status": "PERMANENT — UU (distribution-dependent compression)",
+      "do_not_attempt": true
+    }
+  },
+
+  "dependency_edges": [
+    {"from": "uniform_measure_pi_bridge", "to": "pac_lower_bound_core", "reason": "counting -> Measure.pi bridge"},
+    {"from": "uniform_measure_pi_bridge", "to": "pac_lower_bound_member", "reason": "same bridge"},
+    {"from": "uniform_measure_pi_bridge", "to": "vcdim_infinite_not_pac", "reason": "substep B: counting -> Measure.pi"},
+    {"from": "pac_lower_bound_core", "to": "pac_lower_bound_member", "reason": "member routes through core"},
+    {"from": "symmetrization_infrastructure", "to": "union_bound_consistent", "reason": "ghost sample coupling required"},
+    {"from": "symmetrization_infrastructure", "to": "vcdim_finite_imp_uc", "reason": "two-sided concentration"},
+    {"from": "fin_arithmetic_toolkit", "to": "boost_two_thirds_to_pac", "reason": "block splitting + iIndepFun_block_extract"},
+    {"from": "fin_arithmetic_toolkit", "to": "vcdim_infinite_not_pac", "reason": "Fin m -> T cardinality"},
+    {"from": "iIndepFun_block_extract", "to": "boost_two_thirds_to_pac", "reason": "block independence under Measure.pi (critical path)"}
+  ],
+
+  "uncommitted_infrastructure_nodes": {
+    "block_extract": {
+      "file": "Generalization:2983",
+      "sorry_free": true,
+      "description": "Extract block j from Fin(k*m) sample via finProdFinEquiv"
+    },
+    "majority_vote": {
+      "file": "Generalization:2987",
+      "sorry_free": true,
+      "description": "Majority vote over k Boolean votes"
+    },
+    "block_extract_disjoint": {
+      "file": "Generalization:2991",
+      "sorry_free": true,
+      "description": "Index sets for different blocks are disjoint"
+    },
+    "iIndepFun_block_extract": {
+      "file": "Generalization:3004",
+      "sorry_free": false,
+      "description": "Block extractions are independent under Measure.pi",
+      "proof_routes": ["Route A: via iIndepFun_iff_map_fun_eq_pi_map + infinitePi_map_curry (RECOMMENDED)", "Route B: direct product formula via cylinder sets"],
+      "requires_import": "Mathlib.Probability.ProductMeasure"
+    },
+    "growth_bounded_at_vcdim": {
+      "file": "Generalization:867",
+      "sorry_free": false,
+      "description": "Non-existential Sauer-Shelah at known VCDim"
+    },
+    "boost_majority_vote": {
+      "file": "Separation (private)",
+      "sorry_free": true,
+      "description": "Private duplicate of majority_vote for boosting"
+    },
+    "boost_block_extract": {
+      "file": "Separation (private)",
+      "sorry_free": true,
+      "description": "Private duplicate of block extraction for boosting"
+    }
+  },
+
+  "directions": {
+    "D1_concentration": {
+      "sorrys": ["union_bound_consistent", "vcdim_finite_imp_uc"],
+      "count": 2,
+      "depends_on_infrastructure": ["symmetrization_infrastructure", "uniform_measure_pi_bridge"],
+      "session4_progress": "Cross-direction analysis only. No proof progress."
+    },
+    "D2_nfl": {
+      "sorrys": ["pac_lower_bound_core", "pac_lower_bound_member", "vcdim_infinite_not_pac"],
+      "count": 3,
+      "depends_on_infrastructure": ["uniform_measure_pi_bridge", "fin_arithmetic_toolkit"],
+      "shared_core": "All 3 need counting-to-Measure.pi bridge on Fin m -> T",
+      "session4_progress": "D0-Bridge research completed. 9 UKs resolved. Proof strategy identified."
+    },
+    "D4_boosting": {
+      "sorrys": ["boost_two_thirds_to_pac"],
+      "count": 1,
+      "depends_on_infrastructure": ["fin_arithmetic_toolkit"],
+      "side_effect": "Closing this also closes universal_imp_pac (Separation calls boost)",
+      "session4_progress": "Significant. Learner written. Event containment proved. Blocked on iIndepFun_block_extract."
+    },
+    "D5_compression_bridge": {
+      "sorrys": ["compression_bounds_vcdim", "sample_complexity_upper_bound"],
+      "count": 2,
+      "depends_on_infrastructure": [],
+      "session4_progress": "compression_bounds_vcdim: statement corrected, proof strategy identified (NOT closed). sample_complexity: restructured to pure arithmetic."
+    },
+    "D6_rademacher": {
+      "sorrys": ["vcdim_bounds_rademacher_quantitative", "rademacher_vanishing_imp_pac"],
+      "count": 2,
+      "depends_on_infrastructure": ["symmetrization_infrastructure"],
+      "session4_progress": "None (research only)."
+    }
+  },
+
+  "reclassified": [
+    {
+      "name": "vcdim_finite_imp_compression",
+      "from": "D5 actionable",
+      "to": "PERMANENT (UU_deep)",
+      "session": "S4",
+      "reason": "Gamma_76: Moran-Yehudayoff 2016, open mathematics. Gamma_82: Littlestone-Warmuth conjecture ($600 bounty, 40yr)."
+    }
+  ],
+
+  "cross_direction_discovery": {
+    "Gamma_77": "Two bottleneck skills (Measure.pi bridge + Fin toolkit) shared across D1/D2/D4/D6",
+    "Gamma_78": "All 11 actionable sorrys on single axis: finite combinatorics -> measure lift",
+    "implication": "Building shared infrastructure is highest-leverage action. Individual sorry attacks without this infrastructure are wasteful."
+  },
+
+  "priority_ordering": [
+    "1. Build shared infrastructure (uniform_measure_pi_bridge + iIndepFun_block_extract proof)",
+    "2. D2 NFL chain (3-for-1: pac_lower_bound_core -> _member -> vcdim_infinite_not_pac)",
+    "3. D4 boosting (partially written, unblocks universal_imp_pac)",
+    "4. D5 compression_bounds_vcdim (proof strategy identified, may be quick)",
+    "5. D5 sample_complexity_upper_bound (pure arithmetic)",
+    "6. D1 concentration (symmetrization, hardest ~200 LOC)",
+    "7. D6 Rademacher (hardest, lowest priority)"
+  ],
+
+  "counterfactual_files": {
+    "CompressionBoundAlt.lean": {
+      "path": "FLT_Proofs/Complexity/CompressionBoundAlt.lean",
+      "lines": 109,
+      "in_build": false,
+      "description": "Route C: O(k*log k) compression -> VCDim bound"
+    },
+    "CompressionBoundOptimal.lean": {
+      "path": "FLT_Proofs/Complexity/CompressionBoundOptimal.lean",
+      "lines": 682,
+      "in_build": false,
+      "description": "Route E: O(k) Littlestone-Warmuth benchmark (OPEN conjecture)"
+    }
+  }
+}
